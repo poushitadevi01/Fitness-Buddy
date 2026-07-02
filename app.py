@@ -14,10 +14,10 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "fitness-buddy-secret-2024")
 
 # ── IBM watsonx configuration ──────────────────────────────────────────────────
-WATSONX_API_KEY    = os.getenv("WATSONX_API_KEY", "3n4P6HO3e-6DS7lT1tHu49DsBkKg-e91fAyaYIwROZtg")
-WATSONX_PROJECT_ID = os.getenv("WATSONX_PROJECT_ID", "7456c6c7-5423-4813-ba5f-8b603d9c4584")
-WATSONX_URL        = os.getenv("WATSONX_URL", "https://us-south.ml.cloud.ibm.com")
-WATSONX_MODEL_ID   = os.getenv("WATSONX_MODEL_ID", "meta-llama/llama-3-3-70b-instruct")
+WATSONX_API_KEY    = os.getenv("WATSONX_API_KEY")
+WATSONX_PROJECT_ID = os.getenv("WATSONX_PROJECT_ID")
+WATSONX_URL        = os.getenv("WATSONX_URL")
+WATSONX_MODEL_ID   = os.getenv("WATSONX_MODEL_ID")
 
 IAM_TOKEN_URL = "https://iam.cloud.ibm.com/identity/token"
 
