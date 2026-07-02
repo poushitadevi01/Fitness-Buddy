@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Hydration Tracker — FitBuddy AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="page-header mb-4">
+        <h1 class="fw-bold"><i class="bi bi-droplet-fill text-info me-2"></i>Hydration Tracker</h1>
+        <p class="text-muted">Know your daily water intake needs based on your body weight and activity level.</p>
+      </div>
+
+      {% if water_info %}
+      <!-- Main Result -->
+      <div class="card fb-card shadow-sm mb-4 border-info">
+        <div class="card-body p-4 text-center">
+          <p class="text-muted mb-1">Your Daily Water Goal</p>
+          <div class="display-3 fw-bold text-info">{{ water_info.liters }} <small class="fs-4">L</small></div>
+          <p class="text-muted mt-1">{{ water_info.ml }} mL &nbsp;|&nbsp; {{ water_info.glasses }} glasses</p>
+
+          <!-- Water Glass Visual -->
+          <div class="water-glasses d-flex justify-content-center flex-wrap gap-2 mt-3">
+            {% for i in range(water_info.glasses) %}
+              <div class="water-glass {{ 'filled' if i < (water_info.glasses // 2) }}">
+                <i class="bi bi-cup-fill"></i>
+              </div>
+            {% endfor %}
+          </div>
+
+          <p class="text-muted small mt-3 mb-0">
+            Based on your weight ({{ profile.weight }} kg) and activity level ({{ profile.level or 'moderate' }}).
+          </p>
+        </div>
+      </div>
+
+      <!-- Schedule -->
+      <div class="card fb-card shadow-sm mb-4">
+        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+          <h5 class="fw-semibold mb-0">Suggested Drinking Schedule</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3">
+            {% set times = [
+              ('07:00', 'Wake up', 'bi-sunrise-fill text-warning', '1 glass (250 ml) — rehydrate after sleep'),
+              ('09:00', 'Morning', 'bi-cup-fill text-info', '1–2 glasses — stay sharp at work'),
+              ('12:00', 'Before Lunch', 'bi-cup-fill text-success', '1 glass — aids digestion'),
+              ('15:00', 'Afternoon', 'bi-cup-fill text-info', '1–2 glasses — fight the afternoon slump'),
+              ('17:00', 'Pre-Workout', 'bi-lightning-fill text-primary', '1 glass — fuel your session'),
+              ('19:00', 'Post-Workout', 'bi-cup-fill text-danger', '2 glasses — replenish and recover'),
+              ('21:00', 'Evening', 'bi-moon-fill text-secondary', '1 glass — finish your daily goal')
+            ] %}
+            {% for time, label, icon, note in times %}
+            <div class="col-12">
+              <div class="d-flex align-items-center gap-3">
+                <div class="text-center" style="min-width:50px">
+                  <small class="text-muted fw-medium">{{ time }}</small>
+                </div>
+                <i class="bi {{ icon }} fs-5"></i>
+                <div>
+                  <div class="fw-medium small">{{ label }}</div>
+                  <div class="text-muted" style="font-size:.8rem">{{ note }}</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {% else %}
+      <!-- No Profile -->
+      <div class="card fb-card shadow-sm text-center p-5">
+        <i class="bi bi-person-x fs-1 text-muted mb-3"></i>
+        <h5 class="fw-semibold">Profile Required</h5>
+        <p class="text-muted">Set your weight and fitness level to calculate your personalised hydration goal.</p>
+        <a href="{{ url_for('profile') }}" class="btn btn-primary">
+          <i class="bi bi-person-plus me-2"></i>Set Up Profile
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- General Tips -->
+      <div class="card fb-card shadow-sm mt-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Hydration Tips</h6>
+          <ul class="list-unstyled mb-0 small">
+            <li class="mb-2 d-flex gap-2"><i class="bi bi-droplet-fill text-info mt-1"></i>Drink a glass of water first thing in the morning.</li>
+            <li class="mb-2 d-flex gap-2"><i class="bi bi-droplet-fill text-info mt-1"></i>Carry a reusable water bottle with you at all times.</li>
+            <li class="mb-2 d-flex gap-2"><i class="bi bi-droplet-fill text-info mt-1"></i>Set hourly reminders if you forget to drink.</li>
+            <li class="mb-2 d-flex gap-2"><i class="bi bi-droplet-fill text-info mt-1"></i>Eat water-rich foods like cucumbers, watermelon, and lettuce.</li>
+            <li class="d-flex gap-2"><i class="bi bi-droplet-fill text-info mt-1"></i>Check urine colour — pale yellow means you're well hydrated.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

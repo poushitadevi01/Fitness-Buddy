@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Workout Planner — FitBuddy AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="page-header mb-4">
+        <h1 class="fw-bold"><i class="bi bi-activity text-primary me-2"></i>Workout Planner</h1>
+        <p class="text-muted">Get an AI-generated home workout plan tailored to your goals and fitness level.</p>
+      </div>
+
+      <div class="card fb-card shadow-sm mb-4">
+        <div class="card-body p-4">
+          <form method="POST" action="{{ url_for('workout') }}">
+            <div class="row g-3 mb-3">
+              <div class="col-sm-4">
+                <label class="form-label fw-medium">Duration (minutes)</label>
+                <select name="duration" class="form-select fb-input">
+                  <option value="15">15 min – Quick</option>
+                  <option value="30" selected>30 min – Standard</option>
+                  <option value="45">45 min – Extended</option>
+                  <option value="60">60 min – Full</option>
+                </select>
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label fw-medium">Focus Area</label>
+                <select name="focus" class="form-select fb-input">
+                  <option value="full body">Full Body</option>
+                  <option value="upper body">Upper Body</option>
+                  <option value="lower body">Lower Body</option>
+                  <option value="core and abs">Core &amp; Abs</option>
+                  <option value="cardio and HIIT">Cardio &amp; HIIT</option>
+                  <option value="yoga and stretching">Yoga &amp; Stretching</option>
+                </select>
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label fw-medium">Equipment</label>
+                <select name="equipment" class="form-select fb-input">
+                  <option value="none (bodyweight only)">No Equipment</option>
+                  <option value="resistance bands">Resistance Bands</option>
+                  <option value="dumbbells">Dumbbells</option>
+                  <option value="dumbbells and resistance bands">Dumbbells + Bands</option>
+                  <option value="full home gym">Full Home Gym</option>
+                </select>
+              </div>
+            </div>
+
+            {% if profile %}
+            <div class="alert alert-primary alert-sm d-flex align-items-center gap-2 py-2 mb-3">
+              <i class="bi bi-person-check-fill"></i>
+              <small>Personalising for <strong>{{ profile.name or 'you' }}</strong> — {{ profile.level or 'beginner' }} level, goal: {{ profile.goal or 'general fitness' }}</small>
+            </div>
+            {% else %}
+            <div class="alert alert-warning alert-sm d-flex align-items-center gap-2 py-2 mb-3">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <small><a href="{{ url_for('profile') }}">Set up your profile</a> for a more personalised workout plan.</small>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary btn-lg w-100" id="workoutBtn">
+              <i class="bi bi-lightning-charge-fill me-2"></i>Generate Workout Plan
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {% if plan %}
+      <div class="card fb-card shadow-sm">
+        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+          <h5 class="fw-semibold mb-0">
+            <i class="bi bi-stars text-warning me-2"></i>Your AI-Generated Workout Plan
+          </h5>
+          <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('workoutPlan')">
+            <i class="bi bi-clipboard me-1"></i>Copy
+          </button>
+        </div>
+        <div class="card-body px-4 pb-4">
+          <div class="ai-response" id="workoutPlan">{{ plan }}</div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Tips -->
+      <div class="card fb-card mt-4 shadow-sm">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Home Workout Tips</h6>
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-success mt-1"></i><span>Clear a 2×2m space before starting.</span></li>
+            <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-success mt-1"></i><span>Always warm up to prevent injuries.</span></li>
+            <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-success mt-1"></i><span>Rest 48 hours before training the same muscle group.</span></li>
+            <li class="d-flex gap-2 mb-2"><i class="bi bi-check-circle-fill text-success mt-1"></i><span>Stay hydrated — drink water before, during, and after.</span></li>
+            <li class="d-flex gap-2 mb-0"><i class="bi bi-check-circle-fill text-success mt-1"></i><span>Track progress weekly to stay motivated.</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.querySelector("form").addEventListener("submit", function() {
+  const btn = document.getElementById("workoutBtn");
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating…';
+  btn.disabled = true;
+});
+</script>
+{% endblock %}

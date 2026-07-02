@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Meal Suggestions — FitBuddy AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="page-header mb-4">
+        <h1 class="fw-bold"><i class="bi bi-egg-fried text-warning me-2"></i>Healthy Meal Suggestions</h1>
+        <p class="text-muted">AI-generated meal ideas aligned with your fitness goals and dietary preferences.</p>
+      </div>
+
+      <div class="card fb-card shadow-sm mb-4">
+        <div class="card-body p-4">
+          <form method="POST" action="{{ url_for('meal') }}">
+            <div class="row g-3 mb-3">
+              <div class="col-sm-4">
+                <label class="form-label fw-medium">Meal Type</label>
+                <select name="meal_type" class="form-select fb-input">
+                  <option value="all meals for the day">Full Day Plan</option>
+                  <option value="breakfast">Breakfast</option>
+                  <option value="lunch">Lunch</option>
+                  <option value="dinner">Dinner</option>
+                  <option value="healthy snacks">Healthy Snacks</option>
+                  <option value="pre-workout">Pre-Workout</option>
+                  <option value="post-workout">Post-Workout</option>
+                </select>
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label fw-medium">Dietary Preference</label>
+                <select name="dietary_pref" class="form-select fb-input">
+                  <option value="none">No Restriction</option>
+                  <option value="vegetarian">Vegetarian</option>
+                  <option value="vegan">Vegan</option>
+                  <option value="gluten-free">Gluten-Free</option>
+                  <option value="dairy-free">Dairy-Free</option>
+                  <option value="keto">Keto</option>
+                  <option value="mediterranean">Mediterranean</option>
+                  <option value="high protein">High Protein</option>
+                </select>
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label fw-medium">Daily Calories (kcal)</label>
+                <select name="calories" class="form-select fb-input">
+                  <option value="1500">1500 kcal (Cut)</option>
+                  <option value="1800">1800 kcal (Light)</option>
+                  <option value="2000" selected>2000 kcal (Maintenance)</option>
+                  <option value="2500">2500 kcal (Active)</option>
+                  <option value="3000">3000 kcal (Bulk)</option>
+                </select>
+              </div>
+            </div>
+
+            {% if profile %}
+            <div class="alert alert-warning alert-sm d-flex align-items-center gap-2 py-2 mb-3">
+              <i class="bi bi-person-check-fill"></i>
+              <small>Personalising for <strong>{{ profile.name or 'you' }}</strong> — goal: {{ profile.goal or 'general health' }}</small>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-warning btn-lg w-100 text-dark fw-semibold" id="mealBtn">
+              <i class="bi bi-stars me-2"></i>Generate Meal Suggestions
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {% if suggestions %}
+      <div class="card fb-card shadow-sm">
+        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4 d-flex justify-content-between align-items-center">
+          <h5 class="fw-semibold mb-0">
+            <i class="bi bi-stars text-warning me-2"></i>Your AI Meal Plan
+          </h5>
+          <button class="btn btn-sm btn-outline-secondary" onclick="copyToClipboard('mealPlan')">
+            <i class="bi bi-clipboard me-1"></i>Copy
+          </button>
+        </div>
+        <div class="card-body px-4 pb-4">
+          <div class="ai-response" id="mealPlan">{{ suggestions }}</div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Nutrition Tips -->
+      <div class="row g-4 mt-2">
+        <div class="col-md-6">
+          <div class="card fb-card shadow-sm h-100">
+            <div class="card-body p-4">
+              <h6 class="fw-semibold mb-3 text-success"><i class="bi bi-check-circle-fill me-2"></i>Do's</h6>
+              <ul class="list-unstyled mb-0 small">
+                <li class="mb-2">Eat 5–6 small meals throughout the day</li>
+                <li class="mb-2">Include lean protein in every meal</li>
+                <li class="mb-2">Load up on colourful vegetables</li>
+                <li class="mb-2">Choose whole grains over refined carbs</li>
+                <li>Drink water before each meal</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card fb-card shadow-sm h-100">
+            <div class="card-body p-4">
+              <h6 class="fw-semibold mb-3 text-danger"><i class="bi bi-x-circle-fill me-2"></i>Don'ts</h6>
+              <ul class="list-unstyled mb-0 small">
+                <li class="mb-2">Skip breakfast</li>
+                <li class="mb-2">Eat processed foods and added sugars</li>
+                <li class="mb-2">Drink sugary sodas and juices</li>
+                <li class="mb-2">Eat large meals late at night</li>
+                <li>Go more than 4–5 hours without eating</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.querySelector("form").addEventListener("submit", function() {
+  const btn = document.getElementById("mealBtn");
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generating…';
+  btn.disabled = true;
+});
+</script>
+{% endblock %}

@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block title %}AI Chat — FitBuddy AI{% endblock %}
+
+{% block extra_head %}
+<style>
+  .chat-container { height: calc(100vh - 200px); min-height: 500px; display: flex; flex-direction: column; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 1.5rem; scroll-behavior: smooth; }
+  .chat-input-area { padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: #fff; }
+  .message { max-width: 80%; margin-bottom: 1rem; }
+  .message.user { margin-left: auto; }
+  .message.user .bubble {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 18px 18px 4px 18px;
+  }
+  .message.bot .bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px 18px 18px 18px;
+    white-space: pre-wrap;
+  }
+  .bubble { padding: .75rem 1rem; font-size: .93rem; line-height: 1.6; }
+  .message .meta { font-size: .75rem; color: var(--muted); margin-top: .25rem; }
+  .message.user .meta { text-align: right; }
+  .typing-indicator { display: none; }
+  .typing-indicator.show { display: flex; }
+  .typing-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); animation: typing 1.2s infinite; margin: 2px; }
+  .typing-dot:nth-child(2) { animation-delay: .2s; }
+  .typing-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes typing { 0%,100% { opacity: .3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-4px); } }
+  .quick-prompt-btn { font-size: .8rem; white-space: nowrap; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:900px">
+  <div class="row g-4">
+
+    <!-- Chat Panel -->
+    <div class="col-lg-8">
+      <div class="page-header mb-3">
+        <h1 class="fw-bold fs-3 mb-1"><i class="bi bi-chat-dots-fill text-primary me-2"></i>FitBuddy AI Chat</h1>
+        <p class="text-muted small mb-0">Ask anything about fitness, nutrition, workouts, or wellness.</p>
+      </div>
+
+      <div class="card fb-card shadow-sm overflow-hidden" style="border-radius:16px">
+        <div class="chat-container">
+
+          <div class="chat-messages" id="chatMessages">
+            <!-- Welcome message -->
+            <div class="message bot">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <div class="bot-avatar"><i class="bi bi-robot"></i></div>
+                <span class="fw-medium small">FitBuddy AI</span>
+                <span class="badge bg-success-subtle text-success" style="font-size:.65rem">IBM watsonx</span>
+              </div>
+              <div class="bubble">
+                Hey {% if profile and profile.name %}{{ profile.name }}{% else %}there{% endif %}! 👋 I'm FitBuddy, your AI-powered fitness companion.
+
+I can help you with:
+• 🏋️ Personalised workout plans
+• 🥗 Nutrition and meal advice
+• 💪 Exercise form and technique
+• 📊 Understanding your fitness metrics
+• 🎯 Reaching your fitness goals
+
+What would you like to know today?
+              </div>
+              <div class="meta">Just now</div>
+            </div>
+          </div>
+
+          <!-- Typing indicator -->
+          <div class="px-4 py-2">
+            <div class="typing-indicator align-items-center gap-1" id="typingIndicator">
+              <div class="bot-avatar"><i class="bi bi-robot"></i></div>
+              <div class="bubble d-flex gap-1 py-2 px-3">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input -->
+          <div class="chat-input-area">
+            <div class="input-group">
+              <input type="text" id="chatInput" class="form-control fb-input"
+                     placeholder="Ask about workouts, nutrition, BMI, motivation…"
+                     style="border-radius:12px 0 0 12px" maxlength="500" />
+              <button class="btn btn-primary px-4" id="sendBtn"
+                      style="border-radius:0 12px 12px 0">
+                <i class="bi bi-send-fill"></i>
+              </button>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mt-2">
+              <small class="text-muted" id="charCount">0 / 500</small>
+              <small class="text-muted">Powered by <strong>IBM watsonx</strong></small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+
+      <!-- Quick Prompts -->
+      <div class="card fb-card shadow-sm mb-4">
+        <div class="card-header bg-transparent border-0 pt-3 pb-0 px-3">
+          <h6 class="fw-semibold mb-0 text-muted small text-uppercase ls-1">Quick Questions</h6>
+        </div>
+        <div class="card-body p-3 d-flex flex-wrap gap-2">
+          {% for prompt in [
+            "Create a 30-min HIIT workout",
+            "Best foods for muscle gain",
+            "How to lose belly fat?",
+            "Calculate my calorie needs",
+            "Morning workout routine",
+            "Healthy breakfast ideas",
+            "How much protein do I need?",
+            "Motivate me to exercise!"
+          ] %}
+          <button class="btn btn-outline-secondary quick-prompt-btn" onclick="sendQuickPrompt(this.textContent)">
+            {{ prompt }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Profile Card -->
+      {% if profile %}
+      <div class="card fb-card shadow-sm mb-4">
+        <div class="card-body p-3">
+          <h6 class="fw-semibold mb-3 small text-uppercase text-muted">Your Profile</h6>
+          <div class="d-flex flex-column gap-1 small">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Goal</span>
+              <span class="fw-medium">{{ profile.goal or '—' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Level</span>
+              <span class="fw-medium text-capitalize">{{ profile.level or '—' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Weight</span>
+              <span class="fw-medium">{{ profile.weight or '—' }} kg</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Height</span>
+              <span class="fw-medium">{{ profile.height or '—' }} cm</span>
+            </div>
+          </div>
+          <a href="{{ url_for('profile') }}" class="btn btn-sm btn-outline-primary w-100 mt-3">
+            <i class="bi bi-pencil me-1"></i>Edit Profile
+          </a>
+        </div>
+      </div>
+      {% else %}
+      <div class="card fb-card shadow-sm text-center p-3 mb-4">
+        <i class="bi bi-person-circle fs-2 text-muted mb-2"></i>
+        <p class="small text-muted mb-2">Set up your profile for personalised responses.</p>
+        <a href="{{ url_for('profile') }}" class="btn btn-sm btn-primary">Set Up Profile</a>
+      </div>
+      {% endif %}
+
+      <!-- Clear Chat -->
+      <button class="btn btn-outline-danger w-100 btn-sm" onclick="clearChat()">
+        <i class="bi bi-trash me-1"></i>Clear Conversation
+      </button>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Conversation history for context
+let history = [];
+
+const chatMessages = document.getElementById("chatMessages");
+const chatInput    = document.getElementById("chatInput");
+const sendBtn      = document.getElementById("sendBtn");
+const typing       = document.getElementById("typingIndicator");
+const charCount    = document.getElementById("charCount");
+
+chatInput.addEventListener("input", () => {
+  charCount.textContent = `${chatInput.value.length} / 500`;
+});
+
+chatInput.addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+sendBtn.addEventListener("click", sendMessage);
+
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  appendMessage("user", text);
+  chatInput.value = "";
+  charCount.textContent = "0 / 500";
+  history.push({ role: "user", content: text });
+  showTyping(true);
+  sendBtn.disabled = true;
+
+  fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: text, history }),
+  })
+  .then(r => r.json())
+  .then(data => {
+    showTyping(false);
+    sendBtn.disabled = false;
+    const reply = data.reply || data.error || "Sorry, I couldn't process that.";
+    appendMessage("bot", reply);
+    history.push({ role: "assistant", content: reply });
+  })
+  .catch(() => {
+    showTyping(false);
+    sendBtn.disabled = false;
+    appendMessage("bot", "Connection error. Please try again.");
+  });
+}
+
+function sendQuickPrompt(text) {
+  chatInput.value = text;
+  sendMessage();
+}
+
+function appendMessage(role, content) {
+  const div = document.createElement("div");
+  div.className = `message ${role}`;
+  const now = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const avatarHtml = role === "bot"
+    ? `<div class="d-flex align-items-center gap-2 mb-1">
+         <div class="bot-avatar"><i class="bi bi-robot"></i></div>
+         <span class="fw-medium small">FitBuddy AI</span>
+       </div>` : "";
+  div.innerHTML = `
+    ${avatarHtml}
+    <div class="bubble">${escapeHtml(content)}</div>
+    <div class="meta">${now}</div>`;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTyping(show) {
+  typing.classList.toggle("show", show);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function clearChat() {
+  history = [];
+  const messages = chatMessages.querySelectorAll(".message");
+  messages.forEach((m, i) => { if (i > 0) m.remove(); }); // keep welcome
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+            .replace(/\n/g,"<br/>");
+}
+</script>
+{% endblock %}

@@ -1,0 +1,296 @@
+/* ── FitBuddy AI — Main Stylesheet ─────────────────────────────────────────── */
+
+/* CSS Variables */
+:root {
+  --primary:       #2563eb;
+  --primary-dark:  #1d4ed8;
+  --secondary:     #7c3aed;
+  --success:       #16a34a;
+  --warning:       #d97706;
+  --danger:        #dc2626;
+  --info:          #0891b2;
+  --surface:       #f8fafc;
+  --border:        #e2e8f0;
+  --text:          #0f172a;
+  --muted:         #64748b;
+  --navbar-bg:     #0f172a;
+  --footer-bg:     #0f172a;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── Navbar ─────────────────────────────────────────────────────────────────── */
+.fb-navbar {
+  background: var(--navbar-bg) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: .6rem 0;
+}
+
+.fb-navbar .navbar-brand {
+  font-size: 1.2rem;
+  letter-spacing: -.02em;
+}
+
+.fb-navbar .nav-link {
+  font-size: .88rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.7) !important;
+  border-radius: 8px;
+  padding: .4rem .8rem !important;
+  transition: background .15s, color .15s;
+}
+
+.fb-navbar .nav-link:hover,
+.fb-navbar .nav-link.active {
+  color: #fff !important;
+  background: rgba(255,255,255,.1);
+}
+
+/* ── Main / Footer ──────────────────────────────────────────────────────────── */
+.fb-main { flex: 1; }
+
+.fb-footer {
+  background: var(--footer-bg);
+  color: rgba(255,255,255,.6);
+  padding: 1.25rem 0;
+  font-size: .85rem;
+}
+
+/* ── Hero Section ───────────────────────────────────────────────────────────── */
+.fb-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+  color: #fff;
+  padding: 5rem 0 4rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.fb-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.fb-hero .container {
+    position: relative;
+    z-index: 1;
+}
+
+.fb-hero h1 { color: #fff; }
+.fb-hero .lead { color: rgba(255,255,255,.75); }
+
+/* ── Cards ──────────────────────────────────────────────────────────────────── */
+.fb-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: box-shadow .2s, transform .2s;
+}
+
+.fb-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.08) !important; }
+
+/* ── Feature Cards ──────────────────────────────────────────────────────────── */
+.feature-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  color: var(--text);
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.1);
+  border-color: var(--primary);
+}
+
+.feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* Soft background helpers */
+.bg-primary-soft { background: #eff6ff; }
+.bg-success-soft { background: #f0fdf4; }
+.bg-warning-soft { background: #fffbeb; }
+.bg-info-soft    { background: #ecfeff; }
+.bg-danger-soft  { background: #fef2f2; }
+.bg-purple-soft  { background: #f5f3ff; }
+
+.text-purple { color: #7c3aed !important; }
+
+/* ── Stat Cards ─────────────────────────────────────────────────────────────── */
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 1rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: .8rem;
+  color: var(--muted);
+  margin-top: .25rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── Motivation Card ────────────────────────────────────────────────────────── */
+.motivation-card {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #fde68a;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+}
+
+/* ── Watson Badge ───────────────────────────────────────────────────────────── */
+.watsonx-badge {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* ── Forms ──────────────────────────────────────────────────────────────────── */
+.fb-input {
+  border-radius: 10px !important;
+  border-color: var(--border);
+  padding: .6rem 1rem;
+  font-size: .92rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.fb-input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.12) !important;
+  outline: none;
+}
+
+/* ── AI Response block ──────────────────────────────────────────────────────── */
+.ai-response {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  font-size: .93rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-top: .75rem;
+}
+
+/* ── Page Header ────────────────────────────────────────────────────────────── */
+.page-header h1 { letter-spacing: -.02em; }
+
+/* ── Section Title ──────────────────────────────────────────────────────────── */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+/* ── BMI Scale ──────────────────────────────────────────────────────────────── */
+.bmi-scale { position: relative; padding-top: 1rem; }
+
+.bmi-track {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(to right, #06b6d4 0%, #22c55e 30%, #f59e0b 60%, #ef4444 100%);
+  position: relative;
+}
+
+.bmi-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #0f172a;
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+  transition: left .5s ease;
+}
+
+/* ── Water Glasses ──────────────────────────────────────────────────────────── */
+.water-glass {
+  font-size: 1.5rem;
+  color: #cbd5e1;
+  transition: color .3s;
+}
+
+.water-glass.filled { color: #0891b2; }
+
+/* ── Chat ───────────────────────────────────────────────────────────────────── */
+.bot-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .8rem;
+  flex-shrink: 0;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────────── */
+.btn {
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: .9rem;
+}
+
+.btn-primary    { background: var(--primary); border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+.btn-lg { padding: .65rem 1.5rem; font-size: 1rem; }
+
+/* ── Alert tweaks ───────────────────────────────────────────────────────────── */
+.alert { border-radius: 12px; }
+.alert-sm { font-size: .88rem; }
+
+/* ── Utilities ──────────────────────────────────────────────────────────────── */
+.ls-1 { letter-spacing: .05em; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fb-hero { padding: 3rem 0 2.5rem; }
+  .fb-hero h1 { font-size: 1.75rem; }
+  .message { max-width: 92%; }
+}
+
+/* ── Scrollbar (webkit) ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }

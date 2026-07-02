@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}BMI Calculator — FitBuddy AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="page-header mb-4">
+        <h1 class="fw-bold"><i class="bi bi-calculator-fill text-success me-2"></i>BMI Calculator</h1>
+        <p class="text-muted">Calculate your Body Mass Index and receive personalised AI-powered health insights.</p>
+      </div>
+
+      <div class="card fb-card shadow-sm mb-4">
+        <div class="card-body p-4">
+          <form method="POST" action="{{ url_for('bmi') }}">
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6">
+                <label class="form-label fw-medium">Weight (kg) <span class="text-danger">*</span></label>
+                <input type="number" name="weight" class="form-control fb-input" required
+                       min="20" max="300" step="0.1" placeholder="e.g. 70"
+                       value="{{ result.weight if result else (profile.weight or '') }}" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label fw-medium">Height (cm) <span class="text-danger">*</span></label>
+                <input type="number" name="height" class="form-control fb-input" required
+                       min="100" max="250" step="0.1" placeholder="e.g. 175"
+                       value="{{ result.height if result else (profile.height or '') }}" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg w-100">
+              <i class="bi bi-calculator me-2"></i>Calculate BMI
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {% if result %}
+      <!-- BMI Result -->
+      {% set bmi_color = 'info' if result.bmi < 18.5 else ('success' if result.bmi < 25 else ('warning' if result.bmi < 30 else 'danger')) %}
+      <div class="card fb-card border-{{ bmi_color }} shadow-sm mb-4">
+        <div class="card-body p-4 text-center">
+          <p class="text-muted mb-1">Your BMI</p>
+          <div class="display-3 fw-bold text-{{ bmi_color }}">{{ result.bmi }}</div>
+          <span class="badge bg-{{ bmi_color }} fs-6 px-3 py-2 mt-2">{{ result.category }}</span>
+
+          <!-- BMI Scale -->
+          <div class="mt-4 mb-2">
+            <div class="bmi-scale">
+              <div class="bmi-track">
+                {% set pct = ((result.bmi - 10) / 40 * 100) %}
+                {% set pct = [pct, 2] | max %}
+                {% set pct = [pct, 98] | min %}
+                <div class="bmi-marker" style="left: {{ pct }}%"></div>
+              </div>
+              <div class="bmi-labels d-flex justify-content-between mt-1">
+                <small class="text-info">Underweight<br/>&lt;18.5</small>
+                <small class="text-success">Normal<br/>18.5–24.9</small>
+                <small class="text-warning">Overweight<br/>25–29.9</small>
+                <small class="text-danger">Obese<br/>&ge;30</small>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-muted mt-3 mb-0">{{ result.advice }}</p>
+        </div>
+      </div>
+
+      <!-- AI Tips -->
+      {% if result.ai_tips %}
+      <div class="card fb-card shadow-sm">
+        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+          <h5 class="fw-semibold mb-0">
+            <i class="bi bi-stars text-warning me-2"></i>AI-Powered Recommendations
+          </h5>
+        </div>
+        <div class="card-body px-4 pb-4">
+          <div class="ai-response">{{ result.ai_tips }}</div>
+        </div>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <!-- Reference Table -->
+      <div class="card fb-card shadow-sm mt-4">
+        <div class="card-header bg-transparent border-0 pt-4 pb-0 px-4">
+          <h6 class="fw-semibold text-muted mb-0">BMI Reference Chart (Adults)</h6>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-sm mb-0">
+            <thead class="table-light">
+              <tr><th>BMI Range</th><th>Category</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>&lt; 18.5</td><td><span class="badge bg-info">Underweight</span></td><td>Increase nutritious calories + strength training</td></tr>
+              <tr><td>18.5 – 24.9</td><td><span class="badge bg-success">Normal</span></td><td>Maintain with balanced diet + regular exercise</td></tr>
+              <tr><td>25.0 – 29.9</td><td><span class="badge bg-warning text-dark">Overweight</span></td><td>Cardio + calorie-controlled diet</td></tr>
+              <tr><td>&ge; 30.0</td><td><span class="badge bg-danger">Obese</span></td><td>Consult a healthcare professional</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
