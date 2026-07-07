@@ -8,6 +8,16 @@ An **AI-powered Fitness Companion** web application built with Python Flask and 
 
 ---
 
+## 🚀 Live Demo
+
+🌐 **Live Website**
+
+https://fitness-buddy-bue4.onrender.com
+
+> ⚠️ First load may take 30–60 seconds because Render's free tier puts inactive services to sleep.
+
+---
+
 ## Features
 
 | Feature | Description |
@@ -33,12 +43,6 @@ An **AI-powered Fitness Companion** web application built with Python Flask and 
 ---
 
 ## 📸 Application Screenshots
-
-### 🏠 Hero Section
-
-<p align="center">
-  <img src="screenshots/hero.png" alt="Hero" width="90%">
-</p>
 
 ### 👤 Profile & 🏠 Home
 
@@ -233,6 +237,16 @@ If IBM watsonx credentials are not configured, the app runs in **demo mode** —
 - Add `.env` to your `.gitignore`.
 - Rotate your IBM Cloud API key periodically.
 - In production, set `FLASK_DEBUG=False` and use a strong random `FLASK_SECRET_KEY`.
+
+---
+
+## 👩‍💻 Author
+
+**Poushita Devi**
+
+GitHub: https://github.com/poushitadevi01
+
+LinkedIn: https://www.linkedin.com/in/poushita-devi-63632a351/
 
 ---
 
