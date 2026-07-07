@@ -33,7 +33,7 @@ https://fitness-buddy-bue4.onrender.com
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Backend**: Python 3.11+ / Flask 3.0
 - **AI**: IBM watsonx (meta-llama/llama-3-3-70b-instruct — GPT-OSS 120B)
@@ -73,7 +73,7 @@ https://fitness-buddy-bue4.onrender.com
 
 ---
 
-## Prerequisites
+## 📋 Prerequisites
 
 - Python 3.11 or higher
 - An **IBM Cloud** account (free Lite tier is sufficient)
@@ -81,7 +81,7 @@ https://fitness-buddy-bue4.onrender.com
 
 ---
 
-## IBM Cloud & watsonx Setup
+## ☁️ IBM Cloud & watsonx Setup
 
 1. **Create an IBM Cloud account** at [cloud.ibm.com](https://cloud.ibm.com/) (free Lite tier available).
 
@@ -100,7 +100,7 @@ https://fitness-buddy-bue4.onrender.com
 
 ---
 
-## Installation
+## ⚙️ Installation
 
 ```bash
 # 1. Clone the repository
@@ -131,7 +131,7 @@ The app will be available at **http://localhost:5000**
 
 ---
 
-## Environment Variables
+## 🎯 Environment Variables
 
 Copy `.env.example` to `.env` and fill in your values:
 
@@ -151,7 +151,7 @@ FLASK_DEBUG=False
 
 ---
 
-## Running in Production
+## 🚀 Running in Production
 
 Using **Gunicorn** (Linux/macOS):
 
@@ -168,7 +168,7 @@ waitress-serve --host=0.0.0.0 --port=5000 app:app
 
 ---
 
-## Project Structure
+## 📌 Project Structure
 
 ```
 fitnessbuddy/
@@ -197,7 +197,7 @@ fitnessbuddy/
 
 ---
 
-## API Endpoints
+## 🔗 API Endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
@@ -214,7 +214,7 @@ fitnessbuddy/
 
 ---
 
-## IBM watsonx Model
+## 🤖 IBM watsonx Model
 
 This application uses **`meta-llama/llama-3-3-70b-instruct`** — the GPT-OSS 120B class model available in IBM watsonx Orchestrate. It is accessed via the IBM watsonx REST API (`/ml/v1/text/generation`) using an IAM Bearer token obtained from your IBM Cloud API key.
 
@@ -225,13 +225,13 @@ The model is invoked with:
 
 ---
 
-## Graceful Fallback
+## 🌐 Graceful Fallback
 
 If IBM watsonx credentials are not configured, the app runs in **demo mode** — all features remain accessible and a friendly configuration message is shown instead of AI responses. No errors are thrown.
 
 ---
 
-## Security Notes
+## 🛡️ Security Notes
 
 - Never commit your `.env` file.
 - Add `.env` to your `.gitignore`.
@@ -250,10 +250,11 @@ LinkedIn: https://www.linkedin.com/in/poushita-devi-63632a351/
 
 ---
 
-## License
+## 📜 License
 
 MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-<p align="center">Made with ❤️ using Python Flask + IBM watsonx</p>
+⭐ If you found this project helpful, consider giving it a star!
+<p align="center">Made with ❤️ by **Poushita Devi**</p>
