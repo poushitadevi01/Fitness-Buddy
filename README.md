@@ -2,6 +2,10 @@
 
 An **AI-powered Fitness Companion** web application built with Python Flask and IBM watsonx. FitBuddy delivers personalised workout plans, BMI analysis, healthy meal suggestions, hydration tracking, and real-time fitness chat — all powered by the GPT-OSS 120B (Llama 3.3 70B Instruct) model via IBM watsonx on IBM Cloud Lite.
 
+<p align="center">
+  <img src="screenshots/hero.png" alt="FitBuddy AI Hero" width="100%">
+</p>
+
 ---
 
 ## Features
@@ -25,6 +29,43 @@ An **AI-powered Fitness Companion** web application built with Python Flask and 
 - **AI**: IBM watsonx (meta-llama/llama-3-3-70b-instruct — GPT-OSS 120B)
 - **Frontend**: Bootstrap 5.3, Bootstrap Icons, Vanilla JavaScript
 - **Auth**: IBM Cloud IAM (API key)
+
+---
+
+## 📸 Application Screenshots
+
+### 🏠 Hero Section
+
+<p align="center">
+  <img src="screenshots/hero.png" alt="Hero" width="90%">
+</p>
+
+### 👤 Profile & 🏠 Home
+
+<p align="center">
+  <img src="screenshots/profile.png" alt="Profile" width="45%">
+  <img src="screenshots/home.png" alt="Home" width="45%">
+</p>
+
+### 💪 Workout Planner & 📊 BMI Calculator
+
+<p align="center">
+  <img src="screenshots/workout.png" alt="Workout" width="45%">
+  <img src="screenshots/bmi.png" alt="BMI" width="45%">
+</p>
+
+### 🥗 Meal Suggestions & 💧 Hydration Tracker
+
+<p align="center">
+  <img src="screenshots/meal.png" alt="Meal" width="45%">
+  <img src="screenshots/hydration.png" alt="Hydration" width="45%">
+</p>
+
+### 🤖 AI Chat
+
+<p align="center">
+  <img src="screenshots/chat.png" alt="AI Chat" width="90%">
+</p>
 
 ---
 
